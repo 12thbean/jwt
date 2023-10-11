@@ -1,0 +1,19 @@
+{
+  "name": "zendrop/laravel-jwt",
+  "type": "library",
+  "require": {
+    "firebase/php-jwt": "^6.8"
+  },
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Zendrop\\LaravelJwt\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Igor Filippov",
+      "email": "thisfil@ya.ru"
+    }
+  ]
+}

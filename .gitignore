@@ -1,0 +1,16 @@
+# OS-related
+.DS_Store
+Thumbs.db
+
+# Development tools
+.idea/
+.vscode/
+.php_cs.cache
+.phpstorm.meta.php
+
+# vendor
+composer.lock
+vendor
+
+
+
