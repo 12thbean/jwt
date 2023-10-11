@@ -7,7 +7,7 @@ use Zendrop\LaravelJwt\Exceptions\NonAuthenticatableModelException;
 
 trait HasJwt
 {
-    public function makeJwt(): string
+    public function makeJwt(): Jwt
     {
         /** @var JwtIssuerInterface $jwtIssuer */
         $jwtIssuer = app(JwtIssuerInterface::class);
