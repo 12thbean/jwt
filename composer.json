@@ -2,7 +2,8 @@
   "name": "zendrop/laravel-jwt",
   "type": "library",
   "require": {
-    "firebase/php-jwt": "^6.8"
+    "firebase/php-jwt": "^6.8",
+    "laravel/framework": "^9"
   },
   "license": "MIT",
   "autoload": {
@@ -15,5 +16,12 @@
       "name": "Igor Filippov",
       "email": "thisfil@ya.ru"
     }
-  ]
+  ],
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Zendrop\\LaravelJwt\\LaravelJwtAuthServiceProvider"
+      ]
+    }
+  }
 }
