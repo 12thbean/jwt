@@ -36,7 +36,7 @@ class LaravelJwtAuthServiceProvider extends IlluminateBaseAuthServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__ . '/../../config/laravel-jwt.php' => config_path('laravel-jwt.php'),
+            __DIR__ . '/../config/laravel-jwt.php' => config_path('laravel-jwt.php'),
         ]);
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
