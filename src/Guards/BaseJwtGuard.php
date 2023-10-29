@@ -91,7 +91,7 @@ abstract class BaseJwtGuard
         );
     }
 
-    protected function retrieveUserByToken(string $token): ?Authenticatable
+    public function retrieveUserByToken(string $token): ?Authenticatable
     {
         $jwt = $this->jwtDecoder->decode($token);
 
