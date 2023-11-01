@@ -146,18 +146,18 @@ class JwtStatefulGuard extends BaseJwtGuard implements StatefulGuard
     {
         $shortTermToken = $this->request->cookie(self::SHORT_TERM_COOKIE_NAME);
 
-        if (!$shortTermToken or !is_string($shortTermToken)) {
-            return false;
+        if (empty($shortTermToken)) {
+            return true;
         }
 
         /** @var Authenticatable|null $user */
         $user = $this->retrieveUserByToken($shortTermToken);
 
         if (!$user) {
-            return false;
+            return true;
         }
 
-        return $user->getAuthIdentifier() == $this->user->getAuthIdentifier();
+        return !($user->getAuthIdentifier() === $this->user->getAuthIdentifier());
     }
 
     public function logout(): void
