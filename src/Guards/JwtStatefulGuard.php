@@ -164,6 +164,10 @@ class JwtStatefulGuard extends BaseJwtGuard implements StatefulGuard
     {
         $jwt = $this->jwtDecoder->decode($this->extractTokenFromRequest());
 
+        if (!$jwt) {
+            return;
+        }
+
         if ($this->loggedOut) {
             return;
         }
