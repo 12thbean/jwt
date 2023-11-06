@@ -3,7 +3,7 @@
 namespace Zendrop\LaravelJwt\Console;
 
 use Illuminate\Console\Command;
-use Zendrop\LaravelJwt\DatabaseBlacklist;
+use Zendrop\LaravelJwt\BlacklistDrivers\DatabaseBlacklistDriver;
 
 class RemoveExpiredBlacklistedTokensCommand extends Command
 {
@@ -26,7 +26,7 @@ class RemoveExpiredBlacklistedTokensCommand extends Command
      *
      * @return int
      */
-    public function handle(DatabaseBlacklist $databaseBlacklist): int
+    public function handle(DatabaseBlacklistDriver $databaseBlacklist): int
     {
         $this->info("Initiating removal of expired tokens from the JWT blacklist...");
 

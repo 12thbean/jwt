@@ -2,9 +2,9 @@
 
 namespace Zendrop\LaravelJwt;
 
-interface BlacklistInterface
+interface BlacklistDriverInterface
 {
-    public function add(Jwt $jwt): void;
+    public function add(Jwt|string $jwt): void;
 
     public function has(Jwt|string $jwt): bool;
 }

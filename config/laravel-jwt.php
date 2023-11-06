@@ -13,7 +13,7 @@ return [
         'ttl' => env('LARAVEL_JWT_TTL'),
     ],
 
-    'blacklist-driver' => \Zendrop\LaravelJwt\DatabaseBlacklist::class,
+    'blacklist-driver' => \Zendrop\LaravelJwt\BlacklistDrivers\DatabaseBlacklistDriver::class,
 
     'blacklist-database-table' => 'blacklist_tokens'
 ];

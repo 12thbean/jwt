@@ -1,12 +1,12 @@
 <?php
 
-namespace Zendrop\LaravelJwt;
+namespace Zendrop\LaravelJwt\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int    $id
+ * @property int $id
  * @property string $hash
  * @property Carbon $expired_at
  */

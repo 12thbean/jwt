@@ -2,35 +2,36 @@
 
 namespace Zendrop\LaravelJwt;
 
-use Firebase\JWT\JWT;
+use Firebase\JWT\JWT as FirebaseLibraryJwt;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 class JwtIssuer implements JwtIssuerInterface
 {
     public function __construct(
-        protected string $key,
-        protected string $algorythm,
-        protected JwtIssuerConfig $config,
+        protected readonly string $rawEncodeKey,
+        protected readonly string $encodingAlgorithm,
+        protected readonly string $tokenIssuerName,
+        protected readonly int $tokenTTL
     ) {
     }
 
-    public function makeJwt(Authenticatable $authenticatable): \Zendrop\LaravelJwt\Jwt
+    public function makeJwt(Authenticatable $authenticatable): Jwt
     {
         $payload = new Payload(
-            iss: $this->config->iss,
+            iss: $this->tokenIssuerName,
             iat: time(),
-            uid: $authenticatable->getAuthIdentifier(),
-            exp: $this->config->ttl ? time() + $this->config->ttl : null,
+            sub: $authenticatable->getAuthIdentifier(),
+            exp: time() + $this->tokenTTL,
             pwh: $authenticatable->getAuthPassword(),
         );
 
-        $encodedToken = JWT::encode(
+        $encodedToken = FirebaseLibraryJwt::encode(
             payload: $payload->toArray(),
-            key: $this->key,
-            alg: $this->algorythm
+            key: $this->rawEncodeKey,
+            alg: $this->encodingAlgorithm,
         );
 
-        return new \Zendrop\LaravelJwt\Jwt(
+        return new Jwt(
             payload: $payload,
             encodedToken: $encodedToken
         );
