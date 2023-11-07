@@ -6,5 +6,5 @@ use Illuminate\Contracts\Auth\Authenticatable;
 
 interface JwtIssuerInterface
 {
-    public function makeJwt(Authenticatable $authenticatable): Jwt;
+    public function makeJwt(Authenticatable $authenticatable, bool $shortTerm = false): Jwt;
 }

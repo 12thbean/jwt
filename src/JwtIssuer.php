@@ -11,17 +11,20 @@ class JwtIssuer implements JwtIssuerInterface
         protected readonly string $rawEncodeKey,
         protected readonly string $encodingAlgorithm,
         protected readonly string $tokenIssuerName,
-        protected readonly int $tokenTTL
+        protected readonly int $shortTermTokenTTL,
+        protected readonly int $longTermTokenTTL
     ) {
     }
 
-    public function makeJwt(Authenticatable $authenticatable): Jwt
+    public function makeJwt(Authenticatable $authenticatable, bool $shortTerm = false): Jwt
     {
+        $ttl = $shortTerm ? $this->shortTermTokenTTL : $this->longTermTokenTTL;
+
         $payload = new Payload(
             iss: $this->tokenIssuerName,
             iat: time(),
             sub: $authenticatable->getAuthIdentifier(),
-            exp: time() + $this->tokenTTL,
+            exp: time() + $ttl,
             pwh: $authenticatable->getAuthPassword(),
         );
 

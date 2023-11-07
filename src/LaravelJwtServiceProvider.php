@@ -68,7 +68,8 @@ class LaravelJwtServiceProvider extends ServiceProvider
                 rawEncodeKey: config('laravel-jwt.keys.encode'),
                 encodingAlgorithm: config('laravel-jwt.algorithm'),
                 tokenIssuerName: config('laravel-jwt.payload.iss'),
-                tokenTTL: config('laravel-jwt.payload.ttl')
+                shortTermTokenTTL: config('laravel-jwt.token-ttl.short-term'),
+                longTermTokenTTL: config('laravel-jwt.token-ttl.long-term'),
             );
         });
 

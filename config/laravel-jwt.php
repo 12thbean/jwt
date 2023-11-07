@@ -10,7 +10,11 @@ return [
 
     'payload' => [
         'iss' => env('APP_URL'),
-        'ttl' => env('LARAVEL_JWT_TTL'),
+    ],
+
+    'token-ttl' => [
+        'long-term' => env('LARAVEL_JWT_LONG_TERM_TOKEN_TTL', 60 * 60 * 24 * 365),
+        'short-term' => env('LARAVEL_JWT_SHORT_TERM_TOKEN_TTL', 60 * 60 * 24)
     ],
 
     'blacklist-driver' => \Zendrop\LaravelJwt\BlacklistDrivers\DatabaseBlacklistDriver::class,

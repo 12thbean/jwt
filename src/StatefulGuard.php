@@ -187,11 +187,7 @@ class StatefulGuard implements StatefulGuardContract
 
     public function login(Authenticatable $user, $remember = false): void
     {
-        // If the user should be permanently "remembered" by the application we will
-        // queue a permanent cookie that contains user's jwt token
-        if ($remember) {
-            $this->queueJwtCookie($user);
-        }
+        $this->queueJwtCookie($user, $remember);
 
         // If we have an event dispatcher instance set we will fire an event so that
         // any listeners will hook into the authentication events and run actions
@@ -296,14 +292,18 @@ class StatefulGuard implements StatefulGuardContract
      *
      * @return void
      */
-    protected function queueJwtCookie(Authenticatable $user): void
+    protected function queueJwtCookie(Authenticatable $user, bool $remember): void
     {
-        $jwt = $this->jwtIssuer->makeJwt($user);
+        $shouldBeSessionCookie = !$remember;
+
+        $jwt = $this->jwtIssuer->makeJwt($user, $shouldBeSessionCookie);
 
         $cookie = $this->cookieQueuingFactory->make(
             name: 'token',
             value: $jwt->encodedToken,
-            minutes: now()->diffInMinutes(Carbon::createFromTimestamp($jwt->payload->exp)),
+            minutes: ($shouldBeSessionCookie)
+                ? 0
+                : now()->diffInMinutes(Carbon::createFromTimestamp($jwt->payload->exp)),
             httpOnly: false
         );
 
