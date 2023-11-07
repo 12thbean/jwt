@@ -101,6 +101,7 @@ class StatefulGuard implements StatefulGuardContract
         string $name,
         Request $request,
         Guard $guard,
+        JwtIssuerInterface $jwtIssuer,
         BlacklistDriverInterface $blacklist,
         UserProvider $provider,
         EventDispatcher $eventDispatcher,
@@ -109,6 +110,7 @@ class StatefulGuard implements StatefulGuardContract
         $this->name = $name;
         $this->request = $request;
         $this->guard = $guard;
+        $this->jwtIssuer = $jwtIssuer;
         $this->blacklist = $blacklist;
         $this->provider = $provider;
         $this->events = $eventDispatcher;

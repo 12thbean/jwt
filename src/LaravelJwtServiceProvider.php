@@ -137,6 +137,7 @@ class LaravelJwtServiceProvider extends ServiceProvider
             name: $name,
             request: request(),
             guard: $this->createGuard($userProvider),
+            jwtIssuer: $this->app->make(JwtIssuerInterface::class),
             blacklist: $this->app->make(BlacklistDriverInterface::class),
             provider: $userProvider,
             eventDispatcher: $this->app['events']
