@@ -257,7 +257,7 @@ class StatefulGuard implements StatefulGuardContract
         $this->events->dispatch(new Logout($this->name, $user));
 
         if ($token = $this->extractTokenFromRequest($this->request)) {
-            $this->blacklist->add();
+            $this->blacklist->add($token);
         }
 
         // Once we have fired the logout event we will clear the users out of memory
