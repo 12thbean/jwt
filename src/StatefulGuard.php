@@ -303,7 +303,8 @@ class StatefulGuard implements StatefulGuardContract
         $cookie = $this->cookieQueuingFactory->make(
             name: 'token',
             value: $jwt->encodedToken,
-            minutes: now()->diffInMinutes(Carbon::createFromTimestamp($jwt->payload->exp))
+            minutes: now()->diffInMinutes(Carbon::createFromTimestamp($jwt->payload->exp)),
+            httpOnly: false
         );
 
         $this->cookieQueuingFactory->queue($cookie);
