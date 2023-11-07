@@ -390,4 +390,9 @@ class StatefulGuard implements StatefulGuardContract
 
         return $this;
     }
+
+    public function setRequest(Request $request): void
+    {
+        $this->request = $request;
+    }
 }
