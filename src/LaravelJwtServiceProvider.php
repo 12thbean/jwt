@@ -7,6 +7,7 @@ use Illuminate\Auth\AuthManager;
 use Illuminate\Auth\RequestGuard;
 use Illuminate\Contracts\Auth\Guard as IlluminateStatelessGuardContract;
 use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Contracts\Cookie\QueueingFactory as CookieQueueingFactoryContract;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Zendrop\LaravelJwt\Console\RemoveExpiredBlacklistedTokensCommand;
@@ -138,6 +139,7 @@ class LaravelJwtServiceProvider extends ServiceProvider
             request: request(),
             guard: $this->createGuard($userProvider),
             jwtIssuer: $this->app->make(JwtIssuerInterface::class),
+            cookieQueuingFactory: $this->app->make(CookieQueueingFactoryContract::class),
             blacklist: $this->app->make(BlacklistDriverInterface::class),
             provider: $userProvider,
             eventDispatcher: $this->app['events']

@@ -102,6 +102,7 @@ class StatefulGuard implements StatefulGuardContract
         Request $request,
         Guard $guard,
         JwtIssuerInterface $jwtIssuer,
+        CookieQueueingFactory $cookieQueuingFactory,
         BlacklistDriverInterface $blacklist,
         UserProvider $provider,
         EventDispatcher $eventDispatcher,
@@ -111,6 +112,7 @@ class StatefulGuard implements StatefulGuardContract
         $this->request = $request;
         $this->guard = $guard;
         $this->jwtIssuer = $jwtIssuer;
+        $this->cookieQueuingFactory = $cookieQueuingFactory;
         $this->blacklist = $blacklist;
         $this->provider = $provider;
         $this->events = $eventDispatcher;
