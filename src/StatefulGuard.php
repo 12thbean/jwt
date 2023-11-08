@@ -135,6 +135,10 @@ class StatefulGuard implements StatefulGuardContract
     {
         $this->lastAttempted = $user = $this->provider->retrieveByCredentials($credentials);
 
+        if ($user === null) {
+            return false;
+        }
+
         return $this->hasValidCredentials($user, $credentials);
     }
 
@@ -151,6 +155,10 @@ class StatefulGuard implements StatefulGuardContract
         $this->fireAttemptEvent($credentials, $remember);
 
         $this->lastAttempted = $user = $this->provider->retrieveByCredentials($credentials);
+
+        if ($user === null) {
+            return false;
+        }
 
         // If an implementation of UserInterface was returned, we'll ask the provider
         // to validate the user against the given credentials, and if they are in
