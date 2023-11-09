@@ -116,6 +116,13 @@ class LaravelJwtServiceProvider extends ServiceProvider
         });
     }
 
+    /**
+     * @param  AuthManager  $authManager
+     * @param  array<string, mixed>  $config
+     *
+     * @return IlluminateStatelessGuardContract
+     * @throws InvalidConfigException
+     */
     protected function createStatelessGuard(AuthManager $authManager, array $config): IlluminateStatelessGuardContract
     {
         $userProvider = $this->getUserProvider($authManager, $config['provider']);
@@ -127,6 +134,15 @@ class LaravelJwtServiceProvider extends ServiceProvider
         );
     }
 
+    /**
+     * @param  AuthManager  $authManager
+     * @param  string  $name
+     * @param  array<string, mixed>  $config
+     *
+     * @return StatefulGuard
+     * @throws InvalidConfigException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     protected function createStatefulGuard(
         AuthManager $authManager,
         string $name,
@@ -155,7 +171,14 @@ class LaravelJwtServiceProvider extends ServiceProvider
         );
     }
 
-    protected function getUserProvider(AuthManager $authManager, $providerName): UserProvider
+    /**
+     * @param  AuthManager  $authManager
+     * @param  string  $providerName
+     *
+     * @return UserProvider
+     * @throws InvalidConfigException
+     */
+    protected function getUserProvider(AuthManager $authManager, string $providerName): UserProvider
     {
         $userProvider = $authManager->createUserProvider($providerName);
 

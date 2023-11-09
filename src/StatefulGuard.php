@@ -131,6 +131,11 @@ class StatefulGuard implements StatefulGuardContract
         return $this->user ?? ($this->user = call_user_func($this->guard, $this->request));
     }
 
+    /**
+     * @param  array<string, string>  $credentials
+     *
+     * @return bool
+     */
     public function validate(array $credentials = []): bool
     {
         $this->lastAttempted = $user = $this->provider->retrieveByCredentials($credentials);
@@ -145,7 +150,7 @@ class StatefulGuard implements StatefulGuardContract
     /**
      * Attempt to authenticate a user using the given credentials.
      *
-     * @param  array  $credentials
+     * @param  array<string, string>  $credentials
      * @param  bool  $remember
      *
      * @return bool
@@ -180,7 +185,7 @@ class StatefulGuard implements StatefulGuardContract
     /**
      * Log a user into the application without sessions or cookies.
      *
-     * @param  array  $credentials
+     * @param  array<string, string>  $credentials
      *
      * @return bool
      */
@@ -279,15 +284,15 @@ class StatefulGuard implements StatefulGuardContract
     /**
      * Determine if the user matches the credentials.
      *
-     * @param  mixed  $user
-     * @param  array  $credentials
+     * @param  Authenticatable  $user
+     * @param  array<string, string>  $credentials
      *
      * @return bool
      */
     protected function hasValidCredentials(Authenticatable $user, array $credentials): bool
     {
         return $this->timebox->call(function ($timebox) use ($user, $credentials) {
-            $validated = !is_null($user) && $this->provider->validateCredentials($user, $credentials);
+            $validated = $this->provider->validateCredentials($user, $credentials);
 
             if ($validated) {
                 $timebox->returnEarly();
@@ -326,7 +331,7 @@ class StatefulGuard implements StatefulGuardContract
     /**
      * Fire the attempt event with the arguments.
      *
-     * @param  array  $credentials
+     * @param  array<string, string>  $credentials
      * @param  bool  $remember
      *
      * @return void
@@ -377,7 +382,7 @@ class StatefulGuard implements StatefulGuardContract
      * Fire the failed authentication attempt event with the given arguments.
      *
      * @param  Authenticatable|null  $user
-     * @param  array  $credentials
+     * @param  array<string, string>  $credentials
      *
      * @return void
      */
