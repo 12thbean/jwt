@@ -34,14 +34,12 @@
 
     <arg name="basepath" value="."/>
 
-    <file>./app</file>
-    <file>./routes</file>
-    <file>./database</file>
+    <file>./src</file>
     <file>./config</file>
-    <file>./tests</file>
+    <file>./database</file>
 
     <arg name="colors"/>
     <arg value="spv"/>
-    <ini name="memory_limit" value="512M"/>
+    <ini name="memory_limit" value="128M"/>
 </ruleset>
 

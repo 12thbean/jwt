@@ -4,7 +4,6 @@ namespace Zendrop\LaravelJwt;
 
 use Firebase\JWT\JWT as FirebaseLibraryJwt;
 use Firebase\JWT\Key as FirebaseLibraryDecodeKey;
-use Throwable;
 
 class JwtDecoder implements JwtDecoderInterface
 {
@@ -18,7 +17,7 @@ class JwtDecoder implements JwtDecoderInterface
         try {
             $decoded = (array) FirebaseLibraryJwt::decode($encodedToken, $this->key);
             $payload = new Payload(...$decoded);
-        } catch (Throwable $exception) {
+        } catch (\Throwable $exception) {
             return null;
         }
 

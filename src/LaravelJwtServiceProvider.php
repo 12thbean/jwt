@@ -17,12 +17,11 @@ use Zendrop\LaravelJwt\StatefulGuard as IlluminateStatefulGuardContract;
 class LaravelJwtServiceProvider extends ServiceProvider
 {
     public const GUARD_DRIVER_STATELESS = 'laravel-jwt';
+
     public const GUARD_DRIVER_STATEFUL = 'laravel-jwt-stateful';
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -34,7 +33,7 @@ class LaravelJwtServiceProvider extends ServiceProvider
         ]);
 
         if (!app()->configurationIsCached()) {
-            $this->mergeConfigFrom(__DIR__.'/../config/laravel-jwt.php', 'laravel-jwt');
+            $this->mergeConfigFrom(__DIR__ . '/../config/laravel-jwt.php', 'laravel-jwt');
         }
     }
 
@@ -59,8 +58,6 @@ class LaravelJwtServiceProvider extends ServiceProvider
 
     /**
      * Sets up bindings for JWT issuer, decoder, and blacklist interfaces.
-     *
-     * @return void
      */
     protected function bindDependencies(): void
     {
@@ -83,13 +80,11 @@ class LaravelJwtServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->bind(BlacklistDriverInterface::class, (config('laravel-jwt.blacklist-driver')));
+        $this->app->bind(BlacklistDriverInterface::class, config('laravel-jwt.blacklist-driver'));
     }
 
     /**
-     * Configures laravel-jwt guard drivers
-     *
-     * @return void
+     * Configures laravel-jwt guard drivers.
      */
     protected function configureGuardDrivers(): void
     {
@@ -100,6 +95,7 @@ class LaravelJwtServiceProvider extends ServiceProvider
                 callback: function ($app, $name, array $config) use ($auth) {
                     $guard = $this->createStatelessGuard($auth, $config);
                     $app->refresh('request', $guard, 'setRequest');
+
                     return $guard;
                 }
             );
@@ -112,6 +108,7 @@ class LaravelJwtServiceProvider extends ServiceProvider
                 callback: function ($app, $name, array $config) use ($auth) {
                     $guard = $this->createStatefulGuard($auth, $name, $config);
                     $app->refresh('request', $guard, 'setRequest');
+
                     return $guard;
                 }
             );
@@ -119,10 +116,8 @@ class LaravelJwtServiceProvider extends ServiceProvider
     }
 
     /**
-     * @param  AuthManager  $authManager
-     * @param  array<string, mixed>  $config
+     * @param array<string, mixed> $config
      *
-     * @return IlluminateStatelessGuardContract
      * @throws InvalidConfigException
      */
     protected function createStatelessGuard(AuthManager $authManager, array $config): IlluminateStatelessGuardContract
@@ -137,11 +132,8 @@ class LaravelJwtServiceProvider extends ServiceProvider
     }
 
     /**
-     * @param  AuthManager  $authManager
-     * @param  string  $name
-     * @param  array<string, mixed>  $config
+     * @param array<string, mixed> $config
      *
-     * @return StatefulGuard
      * @throws InvalidConfigException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
@@ -174,10 +166,6 @@ class LaravelJwtServiceProvider extends ServiceProvider
     }
 
     /**
-     * @param  AuthManager  $authManager
-     * @param  string  $providerName
-     *
-     * @return UserProvider
      * @throws InvalidConfigException
      */
     protected function getUserProvider(AuthManager $authManager, string $providerName): UserProvider
@@ -185,8 +173,9 @@ class LaravelJwtServiceProvider extends ServiceProvider
         $userProvider = $authManager->createUserProvider($providerName);
 
         if (!$userProvider) {
-            throw new InvalidConfigException("Provider for guard is missed. Check the auth config.");
+            throw new InvalidConfigException('Provider for guard is missed. Check the auth config.');
         }
+
         return $userProvider;
     }
 }

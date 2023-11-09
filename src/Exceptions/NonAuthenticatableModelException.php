@@ -2,18 +2,15 @@
 
 namespace Zendrop\LaravelJwt\Exceptions;
 
-use Throwable;
-
 class NonAuthenticatableModelException extends LaravelJwtException
 {
     public function __construct(
-        string $message = "The model must implement the Authenticatable interface to use JWT.",
+        string $message = 'The model must implement the Authenticatable interface to use JWT.',
         int $code = 0,
-        ?Throwable $previous = null
+        \Throwable $previous = null
     ) {
         if ($message) {
             parent::__construct($message, $code, $previous);
         }
     }
-
 }
