@@ -116,7 +116,7 @@ class StatefulGuard implements StatefulGuardContract
         $this->blacklist = $blacklist;
         $this->provider = $provider;
         $this->events = $eventDispatcher;
-        $this->timebox = $timebox ?? new Timebox;
+        $this->timebox = $timebox ?? new Timebox();
     }
 
     public function user(): ?Authenticatable

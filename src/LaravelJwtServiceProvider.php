@@ -101,7 +101,8 @@ class LaravelJwtServiceProvider extends ServiceProvider
                     $guard = $this->createStatelessGuard($auth, $config);
                     $app->refresh('request', $guard, 'setRequest');
                     return $guard;
-                });
+                }
+            );
         });
 
         // laravel-jwt-stateful
@@ -112,7 +113,8 @@ class LaravelJwtServiceProvider extends ServiceProvider
                     $guard = $this->createStatefulGuard($auth, $name, $config);
                     $app->refresh('request', $guard, 'setRequest');
                     return $guard;
-                });
+                }
+            );
         });
     }
 

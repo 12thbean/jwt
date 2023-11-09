@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<ruleset name="Zendrop code-style standards"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd"
+>
+
+    <!-- Main rule-->
+    <rule ref="PSR12"/>
+
+    <!-- Additional custom rules-->
+    <rule ref="Squiz.Strings.DoubleQuoteUsage.NotRequired"/>
+    <rule ref="Squiz.NamingConventions.ValidVariableName.NotCamelCaps"/>
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+        <properties>
+            <property name="searchAnnotations" value="true"/>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.MethodSpacing">
+        <properties>
+            <property name="minLinesCount" value="1"/>
+            <property name="maxLinesCount" value="1"/>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.PHP.UselessSemicolon"/>
+    <!-- <rule ref="Squiz.PHP.NonExecutableCode"/> Temporary disabled until phpcs 3.8.0+ released -->
+    <rule ref="Generic.PHP.LowerCaseConstant"/>
+    <rule ref="Generic.NamingConventions.CamelCapsFunctionName">
+        <exclude-pattern>*/tests</exclude-pattern>
+    </rule>
+    <rule ref="Generic.CodeAnalysis.UselessOverridingMethod"/>
+    <rule ref="SlevomatCodingStandard.Namespaces.UseFromSameNamespace"/>
+    <rule ref="Squiz.PHP.CommentedOutCode"/>
+
+    <arg name="basepath" value="."/>
+
+    <file>./app</file>
+    <file>./routes</file>
+    <file>./database</file>
+    <file>./config</file>
+    <file>./tests</file>
+
+    <arg name="colors"/>
+    <arg value="spv"/>
+    <ini name="memory_limit" value="512M"/>
+</ruleset>
+
