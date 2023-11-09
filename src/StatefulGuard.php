@@ -10,7 +10,6 @@ use Illuminate\Auth\Events\Logout;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\StatefulGuard as StatefulGuardContract;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Cookie\QueueingFactory as CookieQueueingFactory;
@@ -22,78 +21,58 @@ use Zendrop\LaravelJwt\Traits\ExtractTokenFromRequestTrait;
 
 class StatefulGuard implements StatefulGuardContract
 {
-    use GuardHelpers;
     use ExtractTokenFromRequestTrait;
+    use GuardHelpers;
 
     /**
      * The name of the guard.
      *
      * Corresponds to guard name in authentication configuration.
-     *
-     * @var string
      */
     public readonly string $name;
 
     /**
      * The request instance.
-     *
-     * @var Request
      */
     protected Request $request;
 
     /**
      * The timebox instance.
-     *
-     * @var Timebox
      */
     protected Timebox $timebox;
 
     /**
-     * JwtGuard
-     *
-     * @var Guard
+     * JwtGuard.
      */
     protected Guard $guard;
 
     /**
-     * Invalidated tokens management
-     *
-     * @var BlacklistDriverInterface
+     * Invalidated tokens management.
      */
     protected BlacklistDriverInterface $blacklist;
 
     /**
      * The Illuminate cookie creator service.
-     *
-     * @var CookieQueueingFactory
      */
     protected CookieQueueingFactory $cookieQueuingFactory;
 
     /**
      * The event dispatcher instance.
-     *
-     * @var EventDispatcher
      */
     protected EventDispatcher $events;
 
     /**
-     * The jwt issuer
-     *
-     * @var JwtIssuerInterface
+     * The jwt issuer.
      */
     protected JwtIssuerInterface $jwtIssuer;
 
     /**
      * Indicates if the logout method has been called.
-     *
-     * @var bool
      */
     protected bool $loggedOut = false;
 
     /**
      * The user we last attempted to retrieve.
-     *
-     * @var Authenticatable|null
      */
     protected ?Authenticatable $lastAttempted = null;
 
@@ -116,7 +95,7 @@ class StatefulGuard implements StatefulGuardContract
         $this->blacklist = $blacklist;
         $this->provider = $provider;
         $this->events = $eventDispatcher;
-        $this->timebox = $timebox ?? new Timebox;
+        $this->timebox = $timebox ?? new Timebox();
     }
 
     public function user(): ?Authenticatable
@@ -131,11 +110,14 @@ class StatefulGuard implements StatefulGuardContract
         return $this->user ?? ($this->user = call_user_func($this->guard, $this->request));
     }
 
+    /**
+     * @param array<string, string> $credentials
+     */
     public function validate(array $credentials = []): bool
     {
         $this->lastAttempted = $user = $this->provider->retrieveByCredentials($credentials);
 
-        if ($user === null) {
+        if (null === $user) {
             return false;
         }
 
@@ -145,10 +127,8 @@ class StatefulGuard implements StatefulGuardContract
     /**
      * Attempt to authenticate a user using the given credentials.
      *
-     * @param  array  $credentials
-     * @param  bool  $remember
-     *
-     * @return bool
+     * @param array<string, string> $credentials
+     * @param bool                  $remember
      */
     public function attempt(array $credentials = [], $remember = false): bool
     {
@@ -156,7 +136,7 @@ class StatefulGuard implements StatefulGuardContract
 
         $this->lastAttempted = $user = $this->provider->retrieveByCredentials($credentials);
 
-        if ($user === null) {
+        if (null === $user) {
             return false;
         }
 
@@ -180,9 +160,7 @@ class StatefulGuard implements StatefulGuardContract
     /**
      * Log a user into the application without sessions or cookies.
      *
-     * @param  array  $credentials
-     *
-     * @return bool
+     * @param array<string, string> $credentials
      */
     public function once(array $credentials = []): bool
     {
@@ -212,10 +190,7 @@ class StatefulGuard implements StatefulGuardContract
     /**
      * Log the given user ID into the application.
      *
-     * @param  mixed  $id
-     * @param  bool  $remember
-     *
-     * @return Authenticatable|false
+     * @param bool $remember
      */
     public function loginUsingId($id, $remember = false): Authenticatable|false
     {
@@ -230,10 +205,6 @@ class StatefulGuard implements StatefulGuardContract
 
     /**
      * Log the given user ID into the application without sessions or cookies.
-     *
-     * @param  mixed  $id
-     *
-     * @return Authenticatable|false
      */
     public function onceUsingId($id): Authenticatable|false
     {
@@ -253,8 +224,6 @@ class StatefulGuard implements StatefulGuardContract
 
     /**
      * Log the user out of the application.
-     *
-     * @return void
      */
     public function logout(): void
     {
@@ -279,15 +248,12 @@ class StatefulGuard implements StatefulGuardContract
     /**
      * Determine if the user matches the credentials.
      *
-     * @param  mixed  $user
-     * @param  array  $credentials
-     *
-     * @return bool
+     * @param array<string, string> $credentials
      */
     protected function hasValidCredentials(Authenticatable $user, array $credentials): bool
     {
         return $this->timebox->call(function ($timebox) use ($user, $credentials) {
-            $validated = !is_null($user) && $this->provider->validateCredentials($user, $credentials);
+            $validated = $this->provider->validateCredentials($user, $credentials);
 
             if ($validated) {
                 $timebox->returnEarly();
@@ -299,11 +265,6 @@ class StatefulGuard implements StatefulGuardContract
         }, 200 * 1000);
     }
 
-    /**
-     * @param  Authenticatable  $user
-     *
-     * @return void
-     */
     protected function queueJwtCookie(Authenticatable $user, bool $remember): void
     {
         $shouldBeSessionCookie = !$remember;
@@ -322,14 +283,10 @@ class StatefulGuard implements StatefulGuardContract
         $this->cookieQueuingFactory->queue($cookie);
     }
 
-
     /**
      * Fire the attempt event with the arguments.
      *
-     * @param  array  $credentials
-     * @param  bool  $remember
-     *
-     * @return void
+     * @param array<string, string> $credentials
      */
     protected function fireAttemptEvent(array $credentials, bool $remember = false): void
     {
@@ -338,10 +295,6 @@ class StatefulGuard implements StatefulGuardContract
 
     /**
      * Fires the validated event if the dispatcher is set.
-     *
-     * @param  Authenticatable  $user
-     *
-     * @return void
      */
     protected function fireValidatedEvent(Authenticatable $user): void
     {
@@ -350,11 +303,6 @@ class StatefulGuard implements StatefulGuardContract
 
     /**
      * Fire the login event if the dispatcher is set.
-     *
-     * @param  Authenticatable  $user
-     * @param  bool  $remember
-     *
-     * @return void
      */
     protected function fireLoginEvent(Authenticatable $user, bool $remember = false): void
     {
@@ -363,10 +311,6 @@ class StatefulGuard implements StatefulGuardContract
 
     /**
      * Fire the authenticated event if the dispatcher is set.
-     *
-     * @param  Authenticatable  $user
-     *
-     * @return void
      */
     protected function fireAuthenticatedEvent(Authenticatable $user): void
     {
@@ -376,10 +320,7 @@ class StatefulGuard implements StatefulGuardContract
     /**
      * Fire the failed authentication attempt event with the given arguments.
      *
-     * @param  Authenticatable|null  $user
-     * @param  array  $credentials
-     *
-     * @return void
+     * @param array<string, string> $credentials
      */
     protected function fireFailedEvent(?Authenticatable $user, array $credentials): void
     {
@@ -388,8 +329,6 @@ class StatefulGuard implements StatefulGuardContract
 
     /**
      * Set the current user.
-     *
-     * @param  AuthenticatableContract  $user
      *
      * @return $this
      */

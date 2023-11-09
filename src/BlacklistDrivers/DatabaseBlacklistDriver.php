@@ -19,7 +19,7 @@ class DatabaseBlacklistDriver implements BlacklistDriverInterface
     {
         if (is_string($jwt)) {
             $jwt = $this->jwtDecoder->decode($jwt);
-            if ($jwt === null) {
+            if (null === $jwt) {
                 return;
             }
         }
@@ -39,6 +39,7 @@ class DatabaseBlacklistDriver implements BlacklistDriverInterface
     public function has(Jwt|string $jwt): bool
     {
         $hash = md5((string) $jwt);
+
         return (bool) BlacklistTokenModel::findByHash($hash);
     }
 

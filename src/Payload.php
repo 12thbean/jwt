@@ -3,8 +3,6 @@
 namespace Zendrop\LaravelJwt;
 
 use Illuminate\Contracts\Support\Arrayable;
-use ReflectionClass;
-use ReflectionProperty;
 
 class Payload implements Arrayable
 {
@@ -19,8 +17,8 @@ class Payload implements Arrayable
 
     public function toArray(): array
     {
-        $reflectionClass = new ReflectionClass($this);
-        $properties = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
+        $reflectionClass = new \ReflectionClass($this);
+        $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PUBLIC);
 
         $array = [];
         foreach ($properties as $property) {

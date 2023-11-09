@@ -1,0 +1,26 @@
+name: Code Analyzing
+run-name: Analyzing the code written by ${{ github.actor }} 🚀
+
+on: [ push ]
+
+jobs:
+    PHPStan:
+        runs-on: ubuntu-latest
+        container:
+            image: ubuntu:latest
+
+        steps:
+            -   name: Checkout code (git)
+                uses: actions/checkout@v3
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.1'
+                    tools: composer
+
+            -   name: Install dependencies with composer
+                run: composer install --ignore-platform-reqs --no-suggest --no-progress --no-scripts
+
+            -   name: Run PHPStan
+                run: ./vendor/bin/phpstan analyze --memory-limit 2G

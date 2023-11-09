@@ -1,0 +1,26 @@
+name: Code Style Check
+run-name: Checking the code style of ${{ github.actor }}'s contribution 🧐
+
+on: [ push ]
+
+jobs:
+    PHP_CodeSniffer:
+        runs-on: ubuntu-latest
+        container:
+            image: ubuntu:latest
+
+        steps:
+            -   name: Checkout code (git)
+                uses: actions/checkout@v3
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.1'
+                    tools: composer
+
+            -   name: Install dependencies with composer
+                run: composer install --ignore-platform-reqs --no-suggest --no-progress --no-scripts
+
+            -   name: Run PHP_CodeSniffer
+                run: ./vendor/bin/phpcs --colors -p

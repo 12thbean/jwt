@@ -2,8 +2,6 @@
 
 namespace Zendrop\LaravelJwt\Exceptions;
 
-use Exception;
-
-abstract class LaravelJwtException extends Exception
+abstract class LaravelJwtException extends \Exception
 {
 }
