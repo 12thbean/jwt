@@ -13,7 +13,7 @@ class Payload implements Arrayable
         public readonly int $iat,
         public readonly string|int $sub,
         public readonly ?int $exp,
-        public readonly string $pwh
+        public readonly ?string $pwh
     ) {
     }
 
