@@ -23,19 +23,19 @@ class Guard
     {
         $rawToken = $this->extractTokenFromRequest($request);
 
-        if ($rawToken === null) {
+        if (null === $rawToken) {
             return null;
         }
 
         $jwt = $this->jwtDecoder->decode($rawToken);
 
-        if ($jwt === null) {
+        if (null === $jwt) {
             return null;
         }
 
         $authenticatable = $this->userProvider->retrieveById($jwt->payload->sub);
 
-        if ($authenticatable === null) {
+        if (null === $authenticatable) {
             return null;
         }
 

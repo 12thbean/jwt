@@ -23,16 +23,14 @@ class RemoveExpiredBlacklistedTokensCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(DatabaseBlacklistDriver $databaseBlacklist): int
     {
-        $this->info("Initiating removal of expired tokens from the JWT blacklist...");
+        $this->info('Initiating removal of expired tokens from the JWT blacklist...');
 
         $databaseBlacklist->removeExpired();
 
-        $this->info("Successfully removed expired tokens from the blacklist.");
+        $this->info('Successfully removed expired tokens from the blacklist.');
 
         return self::SUCCESS;
     }
