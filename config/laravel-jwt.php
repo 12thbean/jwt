@@ -19,5 +19,7 @@ return [
 
     'blacklist-driver' => \Zendrop\LaravelJwt\BlacklistDrivers\DatabaseBlacklistDriver::class,
 
-    'blacklist-database-table' => 'blacklist_tokens'
+    'blacklist-database-table' => 'blacklist_tokens',
+
+    'token-cookie-name' => env('JWT_TOKEN_KEY', 'token'), //cookie name
 ];

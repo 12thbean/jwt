@@ -272,7 +272,7 @@ class StatefulGuard implements StatefulGuardContract
         $jwt = $this->jwtIssuer->makeJwt($user, $shouldBeSessionCookie);
 
         $cookie = $this->cookieQueuingFactory->make(
-            name: 'token',
+            name: config('laravel-jwt.token-cookie-name'),
             value: $jwt->encodedToken,
             minutes: ($shouldBeSessionCookie)
                 ? 0

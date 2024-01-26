@@ -8,7 +8,7 @@ trait ExtractTokenFromRequestTrait
 {
     protected function extractTokenFromRequest(Request $request): ?string
     {
-        $token = $request->bearerToken() ?? $request->cookie('token');
+        $token = $request->bearerToken() ?? $request->cookie(config('laravel-jwt.token-cookie-name'));
 
         if (empty($token)) {
             return null;
