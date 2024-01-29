@@ -7,6 +7,9 @@ use Illuminate\Contracts\Auth\Authenticatable;
 
 class JwtIssuer implements JwtIssuerInterface
 {
+    /** @var array<string, Jwt> */
+    private array $lastIssued = [];
+
     public function __construct(
         protected readonly string $rawEncodeKey,
         protected readonly string $encodingAlgorithm,
@@ -34,9 +37,18 @@ class JwtIssuer implements JwtIssuerInterface
             alg: $this->encodingAlgorithm,
         );
 
-        return new Jwt(
+        $jwt = new Jwt(
             payload: $payload,
             encodedToken: $encodedToken
         );
+
+        $this->lastIssued[(string)$authenticatable->getAuthIdentifier()] = $jwt;
+
+        return $jwt;
+    }
+
+    public function getLastIssued(Authenticatable $authenticatable): ?Jwt
+    {
+        return $this->lastIssued[(string)$authenticatable->getAuthIdentifier()] ?? null;
     }
 }

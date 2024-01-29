@@ -18,4 +18,16 @@ trait HasJwt
 
         return $jwtIssuer->makeJwt($this);
     }
+
+    public function getLastIssuedJwt(): ?Jwt
+    {
+        /** @var JwtIssuerInterface $jwtIssuer */
+        $jwtIssuer = app(JwtIssuerInterface::class);
+
+        if (!is_a($this, Authenticatable::class)) {
+            throw new NonAuthenticatableModelException();
+        }
+
+        return $jwtIssuer->getLastIssued($this);
+    }
 }
