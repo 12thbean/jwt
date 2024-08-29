@@ -21,5 +21,10 @@ return [
 
     'blacklist-database-table' => 'blacklist_tokens',
 
-    'token-cookie-name' => env('JWT_TOKEN_KEY', 'token'), //cookie name
+    'token-cookie-name' => env('JWT_TOKEN_KEY', 'token'), //cookie name,
+
+    'cookie' => [
+        'secure' => env('LARAVEL_JWT_COOKIE_SECURE'),
+        'same_site' => env('LARAVEL_JWT_COOKIE_SAME_SITE'),
+    ]
 ];
