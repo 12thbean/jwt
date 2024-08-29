@@ -17,6 +17,7 @@ use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Timebox;
+use Zendrop\LaravelJwt\Exceptions\InvalidConfigException;
 use Zendrop\LaravelJwt\Traits\ExtractTokenFromRequestTrait;
 
 class StatefulGuard implements StatefulGuardContract
@@ -271,13 +272,22 @@ class StatefulGuard implements StatefulGuardContract
 
         $jwt = $this->jwtIssuer->makeJwt($user, $shouldBeSessionCookie);
 
+        $secure = (bool) config('laravel-jwt.cookie.secure');
+        $sameSite = config('laravel-jwt.cookie.same_site');
+
+        if ($sameSite === 'None' && !$secure) {
+            throw new InvalidConfigException('Invalid JWT cookie configuration: SameSite=None requires Secure=true.');
+        }
+
         $cookie = $this->cookieQueuingFactory->make(
             name: config('laravel-jwt.token-cookie-name'),
             value: $jwt->encodedToken,
             minutes: ($shouldBeSessionCookie)
                 ? 0
                 : now()->diffInMinutes(Carbon::createFromTimestamp($jwt->payload->exp)),
-            httpOnly: false
+            httpOnly: false,
+            sameSite: $sameSite,
+            secure: $secure,
         );
 
         $this->cookieQueuingFactory->queue($cookie);
