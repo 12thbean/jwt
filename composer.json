@@ -3,7 +3,7 @@
   "type": "library",
   "require": {
     "firebase/php-jwt": "^6.8",
-    "laravel/framework": "^9|^10|^11"
+    "laravel/framework": "^11|^12"
   },
   "license": "MIT",
   "autoload": {
