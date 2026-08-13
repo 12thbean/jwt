@@ -5,6 +5,10 @@ return [
 
     'keys' => [
         'encode' => env('LARAVEL_JWT_ENCODE_KEY', env('APP_KEY')),
+
+        // Accepts a single key or a comma-separated list. The first key must match the encode
+        // key; the rest are fallbacks that keep previously issued tokens valid during signing
+        // key rotation. E.g. LARAVEL_JWT_DECODE_KEY="base64:new...,base64:old..."
         'decode' => env('LARAVEL_JWT_DECODE_KEY', env('APP_KEY'))
     ],
 

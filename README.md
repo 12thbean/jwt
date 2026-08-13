@@ -43,6 +43,25 @@ Modify the generated `config/laravel-jwt.php` in the config folder to suit your 
 3. Payload: Configure issuer (iss) and time-to-live (ttl) for the JWT.
 4. Blacklist Driver: Specify the driver used for handling blacklisted tokens (default is a database driver).
 
+## Signing key rotation
+
+The decode key accepts a comma-separated list, so the signing key can be rotated without
+invalidating tokens that are already in the wild:
+
+```dotenv
+LARAVEL_JWT_ENCODE_KEY="base64:NEW_KEY"
+LARAVEL_JWT_DECODE_KEY="base64:NEW_KEY,base64:OLD_KEY"
+```
+
+New tokens are signed with the encode key. On verification the keys are tried in order, so
+the first decode key must match the encode key; the rest are fallbacks for previously issued
+tokens. Once the old tokens have drained, remove the old key from the list.
+
+Whenever a token is verified by a fallback key (any key other than the first one), the package
+dispatches a `Zendrop\LaravelJwt\Events\JwtDecodedUsingFallbackKey` event carrying the decoded
+`Jwt` and the matched key index. Listen to it to track how much traffic still relies on the
+old key before withdrawing it.
+
 ## Usage
 
 ### HasJwt Trait
