@@ -1,0 +1,26 @@
+name: Tests
+run-name: Running tests for ${{ github.actor }}'s contribution 🧪
+
+on: [ push ]
+
+jobs:
+    PHPUnit:
+        runs-on: ubuntu-latest
+        container:
+            image: ubuntu:latest
+
+        steps:
+            -   name: Checkout code (git)
+                uses: actions/checkout@v3
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.3'
+                    tools: composer
+
+            -   name: Install dependencies with composer
+                run: composer install --no-progress
+
+            -   name: Run PHPUnit
+                run: ./vendor/bin/phpunit

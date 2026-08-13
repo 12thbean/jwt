@@ -7,6 +7,7 @@ Thumbs.db
 .vscode/
 .php_cs.cache
 .phpstorm.meta.php
+.phpunit.cache/
 
 # vendor
 composer.lock

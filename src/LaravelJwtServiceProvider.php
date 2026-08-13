@@ -72,10 +72,21 @@ class LaravelJwtServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(JwtDecoderInterface::class, function (): JwtDecoder {
+            $algorithm = config('laravel-jwt.algorithm');
+
+            $rawKeys = array_values(array_filter(array_map(
+                'trim',
+                explode(',', (string) config('laravel-jwt.keys.decode'))
+            )));
+
+            if ([] === $rawKeys) {
+                throw new InvalidConfigException('laravel-jwt.keys.decode must contain at least one key.');
+            }
+
             return new JwtDecoder(
-                new Key(
-                    keyMaterial: config('laravel-jwt.keys.decode'),
-                    algorithm: config('laravel-jwt.algorithm')
+                array_map(
+                    static fn (string $keyMaterial): Key => new Key($keyMaterial, $algorithm),
+                    $rawKeys
                 )
             );
         });
