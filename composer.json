@@ -2,8 +2,8 @@
   "name": "zendrop/laravel-jwt",
   "type": "library",
   "require": {
-    "firebase/php-jwt": "^6.8",
-    "laravel/framework": "^11|^12"
+    "firebase/php-jwt": "^6.8|^7.0",
+    "laravel/framework": "^12|^13"
   },
   "license": "MIT",
   "autoload": {
@@ -30,12 +30,12 @@
     }
   },
   "require-dev": {
-    "phpstan/phpstan": "^1.10",
+    "phpstan/phpstan": "^2.2",
     "laravel/pint": "^1.13",
     "squizlabs/php_codesniffer": "^3.7",
     "slevomat/coding-standard": "^8.14",
-    "orchestra/testbench": "^9.5|^10.0",
-    "phpunit/phpunit": "^11.3"
+    "orchestra/testbench": "^10.0|^11.0",
+    "phpunit/phpunit": "^11.3|^12.0"
   },
   "config": {
     "allow-plugins": {
@@ -43,7 +43,9 @@
     },
     "policy": {
       "advisories": {
-        "ignore-id": ["PKSA-y2cr-5h3j-g3ys"]
+        "ignore-id": [
+          "PKSA-y2cr-5h3j-g3ys"
+        ]
       }
     }
   }

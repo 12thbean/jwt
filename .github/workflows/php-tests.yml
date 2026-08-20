@@ -9,6 +9,15 @@ jobs:
         container:
             image: ubuntu:latest
 
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version: [ '8.3', '8.4' ]
+                laravel: [ '12', '13' ]
+                php-jwt: [ '6', '7' ]
+
+        name: PHP ${{ matrix.php-version }} / Laravel ${{ matrix.laravel }} / php-jwt ${{ matrix.php-jwt }}
+
         steps:
             -   name: Checkout code (git)
                 uses: actions/checkout@v3
@@ -16,11 +25,14 @@ jobs:
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: '8.3'
+                    php-version: ${{ matrix.php-version }}
                     tools: composer
 
             -   name: Install dependencies with composer
-                run: composer install --no-progress
+                run: >
+                    composer update --with-all-dependencies --no-progress
+                    --with "laravel/framework:^${{ matrix.laravel }}.0"
+                    --with "firebase/php-jwt:^${{ matrix.php-jwt }}.0"
 
             -   name: Run PHPUnit
                 run: ./vendor/bin/phpunit

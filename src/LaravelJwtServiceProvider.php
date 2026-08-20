@@ -99,12 +99,19 @@ class LaravelJwtServiceProvider extends ServiceProvider
      */
     protected function configureGuardDrivers(): void
     {
+        // Laravel 13 rebinds the extend() callback to the AuthManager instance
+        // (Illuminate\Support\RebindsCallbacksToSelf), which changes both $this and the
+        // closure scope. First-class callables keep their own $this and scope, so guard
+        // creation keeps working on Laravel 11, 12 and 13.
+        $createStatelessGuard = $this->createStatelessGuard(...);
+        $createStatefulGuard = $this->createStatefulGuard(...);
+
         // laravel-jwt
-        Auth::resolved(function (AuthManager $auth) {
+        Auth::resolved(function (AuthManager $auth) use ($createStatelessGuard) {
             $auth->extend(
                 driver: static::GUARD_DRIVER_STATELESS,
-                callback: function ($app, $name, array $config) use ($auth) {
-                    $guard = $this->createStatelessGuard($auth, $config);
+                callback: function ($app, $name, array $config) use ($auth, $createStatelessGuard) {
+                    $guard = $createStatelessGuard($auth, $config);
                     $app->refresh('request', $guard, 'setRequest');
 
                     return $guard;
@@ -113,11 +120,11 @@ class LaravelJwtServiceProvider extends ServiceProvider
         });
 
         // laravel-jwt-stateful
-        Auth::resolved(function (AuthManager $auth) {
+        Auth::resolved(function (AuthManager $auth) use ($createStatefulGuard) {
             $auth->extend(
                 driver: static::GUARD_DRIVER_STATEFUL,
-                callback: function ($app, $name, array $config) use ($auth) {
-                    $guard = $this->createStatefulGuard($auth, $name, $config);
+                callback: function ($app, $name, array $config) use ($auth, $createStatefulGuard) {
+                    $guard = $createStatefulGuard($auth, $name, $config);
                     $app->refresh('request', $guard, 'setRequest');
 
                     return $guard;
