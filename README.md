@@ -3,6 +3,20 @@
 This package provides a simple way to use JWT (JSON Web Tokens) as an authentication guard in a Laravel
 application.
 
+## Requirements
+
+| Package             | Supported versions |
+|---------------------|--------------------|
+| PHP                 | 8.2+ (8.3+ on Laravel 13) |
+| `laravel/framework` | 12, 13             |
+| `firebase/php-jwt`  | 6.8+, 7            |
+
+> **`firebase/php-jwt` 7 enforces a minimum signing key size.** With HMAC algorithms
+> (`HS256`/`HS384`/`HS512`) a key shorter than 32 bytes makes token issuing fail with
+> `DomainException: Provided key is too short`. Laravel's `APP_KEY` is long enough; a custom
+> `LARAVEL_JWT_ENCODE_KEY` may not be. Check your keys before upgrading `firebase/php-jwt`
+> from 6 to 7, or pin `firebase/php-jwt` to `^6.8` until the keys are rotated.
+
 ## Installation
 
 Require package `zendrop/laravel-jwt`

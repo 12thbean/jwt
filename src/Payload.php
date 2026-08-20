@@ -4,6 +4,9 @@ namespace Zendrop\LaravelJwt;
 
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class Payload implements Arrayable
 {
     public function __construct(
@@ -15,6 +18,9 @@ class Payload implements Arrayable
     ) {
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         $reflectionClass = new \ReflectionClass($this);

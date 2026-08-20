@@ -86,7 +86,7 @@ class StatefulGuard implements StatefulGuardContract
         BlacklistDriverInterface $blacklist,
         UserProvider $provider,
         EventDispatcher $eventDispatcher,
-        Timebox $timebox = null,
+        ?Timebox $timebox = null,
     ) {
         $this->name = $name;
         $this->request = $request;

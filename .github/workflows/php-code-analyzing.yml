@@ -9,6 +9,13 @@ jobs:
         container:
             image: ubuntu:latest
 
+        strategy:
+            fail-fast: false
+            matrix:
+                laravel: [ '12', '13' ]
+
+        name: PHPStan / Laravel ${{ matrix.laravel }}
+
         steps:
             -   name: Checkout code (git)
                 uses: actions/checkout@v3
@@ -20,7 +27,9 @@ jobs:
                     tools: composer
 
             -   name: Install dependencies with composer
-                run: composer install --no-progress
+                run: >
+                    composer update --with-all-dependencies --no-progress
+                    --with "laravel/framework:^${{ matrix.laravel }}.0"
 
             -   name: Run PHPStan
                 run: ./vendor/bin/phpstan analyze --memory-limit 2G

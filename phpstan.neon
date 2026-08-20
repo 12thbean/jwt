@@ -10,4 +10,6 @@ parameters:
         maximumNumberOfProcesses: 4
         jobSize: 20
 
-    checkGenericClassInNonGenericObjectType: false
+    ignoreErrors:
+        # HasJwt is a trait for consuming applications, so it has no usage inside src/.
+        - identifier: trait.unused
